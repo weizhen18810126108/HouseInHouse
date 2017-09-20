@@ -23,9 +23,7 @@
         <div class="panel-header">
         <div class="panel-content">
 			<ul>
-					<li><a href="${ctx}/chart/chartMultiX" onclick="linkHighlighted(this)" target="main" id="aa_1">房源概况图</a></li>
-					<li><a href="${ctx}/chart/chartRadar" onclick="linkHighlighted(this)" target="main" id="aa_1">租金占比图</a></li>
-					<li><a href="${ctx}/chart/chartBars" onclick="linkHighlighted(this)" target="main" id="aa_1">房屋来源占比图</a></li>
+					<li><a href="${ctx}/house/houseFindAll" onclick="linkHighlighted(this)" target="main" id="aa_1">房源列表</a></li>
 			</ul>
         </div>
         </div>

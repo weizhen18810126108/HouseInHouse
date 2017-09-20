@@ -46,11 +46,11 @@ public class OrderController extends BaseController {
     @RequestMapping("/toCreateOrder")
     public String toCreateOrder(@RequestParam(required = true) String hhUserId, @RequestParam(required = true) String hhHouseId, Model model, HttpSession session) {
         if (session.getAttribute("SessionUser") == null) {
-            return "redirect:login";
+            return "redirect:/tologin";
         }
 
         User user = null;
-        user = userService.findUserById(hhUserId);
+        user = (User) session.getAttribute("SessionUser");
         HouseInfo houseInfo = null;
         houseInfo = orderService.findHouseInfoById(hhHouseId);
 
@@ -116,24 +116,31 @@ public class OrderController extends BaseController {
 
     //创建订单
     @RequestMapping("/createOrder")
-    public String createOrder(String hhOrdersId, String verfyCode, Order order, HttpSession session, Model model) {
-        if (verfyCode.equals(session.getAttribute("code"))) {//检查验证码是否匹配
-            model.addAttribute("message", "验证码有误");
-            return "/personal/order/OrderCreate";
-        }
+    public String createOrder(String hhOrdersId, int verfyCode, Order order, HttpSession session, Model model) {
         Object ord = session.getAttribute("order");
         if (ord == null) {//检查订单是否失效
             return "redirect:/personal/order/login";// 用户未登入
         }
 
-        Order orde = (Order) ord;
-        if (orde.getHhOrdersId() != hhOrdersId) {//检查订单id是否区配
-            model.addAttribute("message", "订单ID不匹配，请重新下单");
+
+       order = (Order) ord;
+
+
+
+        model.addAttribute("order", order);
+        int code=(int)session.getAttribute("code");
+        if (verfyCode!=code) {//检查验证码是否匹配
+            model.addAttribute("message", "验证码有误");
+            return "/personal/order/OrderCreate";
+        }
+
+        if (!hhOrdersId.equals(order.getHhOrdersId())) {//检查订单id是否区配
+            model.addAttribute("message", "订单ID不匹配，请重新下单12");
             return "/personal/order/OrderCreate";
         }
         order.setHhOrdersId(hhOrdersId);
         order.setHouseInfo(order.getHouseInfo());
-        order.setUser(order.getUser());
+        order.setUser((User) session.getAttribute("SessionUser"));
         int numPer = 1;//入住人数
         try {
             orderService.createOrder(order, numPer);
@@ -143,7 +150,7 @@ public class OrderController extends BaseController {
         }
         session.removeAttribute("order");
         session.removeAttribute("code");
-        return "/personal/order/orderList";
+        return "redirect:/personal/order/list";
     }
 
     //全部订单

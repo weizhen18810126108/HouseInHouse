@@ -14,7 +14,7 @@
 
         <table class="modelTable" cellspacing="1">
         	<tr>
-        		<td colspan="2" class="modelTitle">图表统计模块介绍</td>
+        		<td colspan="2" class="modelTitle">房源模块介绍</td>
         	</tr>
         	<tr>
         		<td colspan="2" class="subModelTitle">房源概况：</td>
